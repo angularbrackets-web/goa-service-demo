@@ -1,0 +1,32 @@
+{
+  "name": "goa-service-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unofficial demo: a citizen-facing 'Report a road issue' service built with the GoA Design System, React and NestJS.",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "apps/api",
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "db:up": "docker compose up -d --wait db",
+    "db:down": "docker compose down",
+    "dev": "npm run dev --workspace apps/api & npm run dev --workspace apps/web",
+    "lint": "npm run lint --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm run test --workspaces",
+    "test:integration": "npm run test:integration --workspace apps/api",
+    "build": "npm run build --workspaces",
+    "e2e": "playwright test",
+    "screenshots": "SCREENSHOTS=1 playwright test --grep @screenshots",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "prettier": "^3.4.2"
+  }
+}

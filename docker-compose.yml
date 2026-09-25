@@ -1,0 +1,23 @@
+# Local PostgreSQL for development and integration tests.
+# `road_reports` is the dev database; `road_reports_test` is created by the
+# init script and is wiped by the integration test suite.
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: demo
+      POSTGRES_PASSWORD: demo
+      POSTGRES_DB: road_reports
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres-init.sql:/docker-entrypoint-initdb.d/01-test-db.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U demo -d road_reports']
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pgdata:
