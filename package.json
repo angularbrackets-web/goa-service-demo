@@ -14,19 +14,22 @@
   "scripts": {
     "db:up": "docker compose up -d --wait db",
     "db:down": "docker compose down",
-    "dev": "npm run dev --workspace apps/api & npm run dev --workspace apps/web",
+    "dev": "npm run dev -w apps/api & npm run dev -w apps/web",
     "lint": "npm run lint --workspaces",
-    "typecheck": "npm run typecheck --workspaces",
+    "typecheck": "npm run typecheck --workspaces && tsc -p tsconfig.e2e.json",
     "test": "npm run test --workspaces",
     "test:integration": "npm run test:integration --workspace apps/api",
     "build": "npm run build --workspaces",
-    "e2e": "playwright test",
-    "screenshots": "SCREENSHOTS=1 playwright test --grep @screenshots",
-    "format": "prettier --write ."
+    "e2e": "npm run build && playwright test",
+    "screenshots": "npm run build && SCREENSHOTS=1 playwright test --grep @screenshots",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
-    "prettier": "^3.4.2"
+    "prettier": "^3.4.2",
+    "@types/node": "^24.0.0",
+    "typescript": "~6.0.2"
   }
 }
