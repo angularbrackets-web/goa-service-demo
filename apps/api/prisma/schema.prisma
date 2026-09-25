@@ -1,0 +1,43 @@
+// Data model for the Report a Road Issue demo.
+// Privacy by design: we only store what staff need to triage a report.
+// Contact email is optional and only collected when the person asks for updates.
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum IssueType {
+  POTHOLE
+  DAMAGED_SIGN
+  STREETLIGHT_OUT
+  DEBRIS
+  OTHER
+}
+
+enum ReportStatus {
+  RECEIVED
+  IN_PROGRESS
+  RESOLVED
+}
+
+model RoadIssueReport {
+  id           String       @id @default(uuid()) @db.Uuid
+  reference    String       @unique @db.VarChar(16)
+  issueType    IssueType    @map("issue_type")
+  location     String       @db.VarChar(200)
+  description  String       @db.VarChar(1000)
+  noticedOn    DateTime     @map("noticed_on") @db.Date
+  contactEmail String?      @map("contact_email") @db.VarChar(254)
+  status       ReportStatus @default(RECEIVED)
+  createdAt    DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([status, createdAt])
+  @@map("road_issue_reports")
+}
